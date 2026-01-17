@@ -1,0 +1,28 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Equipment {
+  id        Int      @id @default(autoincrement())
+  name      String
+  total     Int
+  available Int
+  records   BorrowRecord[]
+}
+
+model BorrowRecord {
+  id          Int       @id @default(autoincrement())
+  userName    String
+  equipmentId Int
+  equipment   Equipment @relation(fields: [equipmentId], references: [id])
+  borrowDate  DateTime  @default(now())
+  returnDate  DateTime?
+  status      String    @default("ACTIVE") // ACTIVE, RETURNED
+}
